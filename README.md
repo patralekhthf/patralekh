@@ -11,6 +11,8 @@ servers.
 > The name *PatraLekh* (पत्रलेख) means "letter-writer" — *patra* (letter/document)
 > + *lekh* (writing).
 
+📖 **New here? Read the [illustrated Getting Started guide](https://patralekhthf.github.io/patralekh/)** — download, install, set up your API key and knowledge base, and your first run, with pictures of every screen. (Also attached to each release as `PatraLekh-Guide.html`.)
+
 ---
 
 ## Download

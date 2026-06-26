@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PatraLekh — Getting Started Guide</title>
+<style>
+  :root{
+    --bg:#f8fafc; --card:#fff; --line:#e2e8f0; --line2:#cbd5e1;
+    --ink:#1e293b; --muted:#64748b; --faint:#94a3b8;
+    --blue:#2563eb; --blue-bg:#eff6ff; --emerald:#059669; --amber:#b45309;
+    --amber-bg:#fffbeb; --amber-line:#fcd34d; --red:#dc2626;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--blue)}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px 80px}
+  /* Hero */
+  header.hero{background:linear-gradient(160deg,#0f172a,#1e293b);color:#fff;padding:56px 20px 48px;text-align:center}
+  header.hero h1{margin:0;font-size:44px;letter-spacing:.5px}
+  header.hero .tag{color:#cbd5e1;font-size:17px;margin-top:10px}
+  header.hero .mean{color:#94a3b8;font-size:13px;margin-top:14px}
+  .cta{display:inline-block;margin-top:22px;background:var(--blue);color:#fff;text-decoration:none;
+       padding:11px 22px;border-radius:8px;font-weight:600;font-size:15px}
+  /* Section */
+  section{margin-top:46px}
+  .step-h{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;
+       display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+  .step-h h2{margin:0;font-size:22px}
+  p{margin:10px 0}
+  .muted{color:var(--muted);font-size:14px}
+  code{background:#eef2f7;border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:13px;
+       font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .note{background:var(--blue-bg);border:1px solid #bfdbfe;border-radius:8px;padding:12px 14px;font-size:14px;margin:14px 0}
+  .warn{background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:8px;padding:12px 14px;font-size:14px;margin:14px 0;color:#7c2d12}
+  ul.clean{margin:10px 0;padding-left:20px}
+  ul.clean li{margin:6px 0}
+  /* OS tabs */
+  .os{display:flex;gap:8px;margin:14px 0 8px;flex-wrap:wrap}
+  .os button{border:1px solid var(--line2);background:#fff;border-radius:7px;padding:7px 14px;font-size:14px;cursor:pointer}
+  .os button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .ospane{display:none;border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff}
+  .ospane.on{display:block}
+  /* Browser-frame mockup ("screenshot") */
+  figure{margin:18px 0 6px}
+  .browser{border:1px solid var(--line2);border-radius:11px;overflow:hidden;background:#fff;
+           box-shadow:0 14px 40px rgba(2,6,23,.10)}
+  .bbar{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#e2e8f0;border-bottom:1px solid var(--line2)}
+  .d{width:11px;height:11px;border-radius:50%}
+  .d.r{background:#ef4444}.d.y{background:#eab308}.d.g{background:#22c55e}
+  .addr{flex:1;background:#fff;border-radius:6px;padding:4px 10px;font-size:12px;color:var(--muted);margin-left:6px}
+  .screen{padding:18px 20px;background:#f8fafc;font-size:13px}
+  figcaption{font-size:12.5px;color:var(--faint);text-align:center;margin-top:8px}
+  /* App-mockup bits */
+  .apphead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .apphead .brand{font-size:18px;font-weight:600}
+  .navlink{color:var(--blue);font-size:12px;margin-left:12px}
+  .tabs{display:flex;gap:14px;border-bottom:1px solid var(--line);margin-bottom:16px;font-size:13px}
+  .tabs span{padding:7px 2px;color:var(--muted)}
+  .tabs span.on{color:var(--blue);border-bottom:2px solid var(--blue);margin-bottom:-1px;font-weight:600}
+  .ui-card{border:1px solid var(--line);border-radius:8px;background:#fff;padding:12px 14px;margin:10px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .pill{font-size:11px;padding:1px 4px;border-radius:4px}
+  .ok{color:var(--emerald)} .warnc{color:var(--amber)} .faintc{color:var(--faint)}
+  .inp{border:1px solid var(--line2);border-radius:6px;padding:7px 9px;background:#fff;color:var(--faint);font-size:12px;flex:1}
+  .btn{background:var(--blue);color:#fff;border-radius:6px;padding:7px 12px;font-size:12px;font-weight:600}
+  .btn.sm{padding:5px 10px}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line2);font-weight:500}
+  .lbl{font-weight:600;font-size:13px}
+  .ta{border:1px solid var(--line2);border-radius:6px;background:#fff;height:64px;padding:8px;color:var(--faint);font-size:12px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .stat{border:1px solid var(--line);border-radius:8px;background:#fff;padding:10px}
+  .stat .k{font-size:10px;color:var(--muted)} .stat .v{font-size:17px;font-weight:700;margin-top:2px}
+  table.mini{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:6px}
+  table.mini th{text-align:left;color:var(--muted);font-weight:600;padding:4px 6px;border-bottom:1px solid var(--line)}
+  table.mini td{padding:4px 6px;border-bottom:1px solid #f1f5f9}
+  table.mini td.r,table.mini th.r{text-align:right}
+  .assets{display:flex;flex-direction:column;gap:7px}
+  .asset{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:7px;padding:8px 11px;background:#fff;font-size:12px}
+  .zip{font-family:ui-monospace,Menlo,monospace}
+  .foot{margin-top:60px;border-top:1px solid var(--line);padding-top:18px;color:var(--faint);font-size:12.5px;text-align:center}
+  .kbd{display:inline-block;border:1px solid var(--line2);border-bottom-width:2px;border-radius:5px;padding:0 6px;font-size:12px;background:#fff}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>PatraLekh</h1>
+  <div class="tag">Tailor your resume to any job — on your own machine.</div>
+  <div class="mean">पत्रलेख · "letter-writer" — runs locally, uses your own AI key, your data never leaves your computer.</div>
+  <a class="cta" href="https://github.com/patralekhthf/patralekh/releases/latest">Download the latest version →</a>
+</header>
+
+<div class="wrap">
+
+  <p class="muted" style="margin-top:30px">This guide walks you through downloading PatraLekh, installing it, adding your AI key, building your knowledge base, and your first run, with a tour of the Settings and Telemetry screens. The screens below are visual previews of the app.</p>
+
+  <!-- 1. DOWNLOAD -->
+  <section>
+    <div class="step-h"><div class="num">1</div><h2>Download</h2></div>
+    <p>Go to the <a href="https://github.com/patralekhthf/patralekh/releases/latest">Releases page</a> and download the file that matches your computer.</p>
+    <ul class="clean">
+      <li><b>Mac (Apple Silicon — M1/M2/M3/M4):</b> <code>PatraLekh-…-macos-arm64.zip</code></li>
+      <li><b>Mac (Intel):</b> <code>PatraLekh-…-macos-intel.zip</code></li>
+      <li><b>Windows:</b> <code>PatraLekh-…-windows.zip</code></li>
+      <li><b>Linux:</b> <code>PatraLekh-…-linux.zip</code></li>
+    </ul>
+    <figure>
+      <div class="browser">
+        <div class="bbar"><div class="d r"></div><div class="d y"></div><div class="d g"></div>
+          <div class="addr">github.com/patralekhthf/patralekh/releases/latest</div></div>
+        <div class="screen">
+          <div style="font-weight:700;font-size:15px">PatraLekh v0.1.0 &nbsp;<span class="pill" style="background:#dcfce7;color:#166534">Latest</span></div>
+          <div class="muted" style="margin:6px 0 12px">Download the file for your OS, unzip, and double-click PatraLekh.</div>
+          <div style="font-weight:600;margin-bottom:8px">▾ Assets</div>
+          <div class="assets">
+            <div class="asset"><span class="zip">📦 PatraLekh-v0.1.0-macos-arm64.zip</span><span class="muted">3.8 MB</span></div>
+            <div class="asset"><span class="zip">📦 PatraLekh-v0.1.0-macos-intel.zip</span><span class="muted">4.3 MB</span></div>
+            <div class="asset"><span class="zip">📦 PatraLekh-v0.1.0-windows.zip</span><span class="muted">4.4 MB</span></div>
+            <div class="asset"><span class="zip">📦 PatraLekh-v0.1.0-linux.zip</span><span class="muted">4.3 MB</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>The Releases page — click the zip for your operating system.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 2. INSTALL -->
+  <section>
+    <div class="step-h"><div class="num">2</div><h2>Install &amp; open</h2></div>
+    <p>There is no installer — PatraLekh is a single app. Unzip the download and double-click it. Your browser opens automatically at <code>http://localhost:8080</code>.</p>
+    <div class="os">
+      <button class="on" data-os="mac">macOS</button>
+      <button data-os="win">Windows</button>
+      <button data-os="lin">Linux</button>
+    </div>
+    <div class="ospane on" id="os-mac">
+      <ul class="clean">
+        <li>Unzip and double-click <b>PatraLekh</b>.</li>
+        <li>First time only: macOS may say the developer "cannot be verified." <b>Right-click the app → Open → Open.</b></li>
+        <li>Alternatively in Terminal: <code>xattr -d com.apple.quarantine ./PatraLekh</code></li>
+      </ul>
+    </div>
+    <div class="ospane" id="os-win">
+      <ul class="clean">
+        <li>Unzip and double-click <b>PatraLekh.exe</b>.</li>
+        <li>First time only: SmartScreen may warn — click <b>More info → Run anyway.</b></li>
+      </ul>
+    </div>
+    <div class="ospane" id="os-lin">
+      <ul class="clean">
+        <li>In a terminal: <code>chmod +x PatraLekh &amp;&amp; ./PatraLekh</code></li>
+      </ul>
+    </div>
+    <div class="warn">A small terminal/console window stays open while PatraLekh runs — that is the app itself. Closing it quits PatraLekh.</div>
+  </section>
+
+  <!-- 3. FIRST RUN -->
+  <section>
+    <div class="step-h"><div class="num">3</div><h2>First run</h2></div>
+    <p>On first launch you will see a banner asking you to set up your knowledge base. That is normal — we will do it in the next steps. Click <b>Settings</b> (top right) to begin.</p>
+    <figure>
+      <div class="browser">
+        <div class="bbar"><div class="d r"></div><div class="d y"></div><div class="d g"></div><div class="addr">localhost:8080</div></div>
+        <div class="screen">
+          <div class="apphead"><div class="brand">PatraLekh</div>
+            <div><span class="navlink">New Resume</span><span class="navlink">Settings</span><span class="navlink">Telemetry</span></div></div>
+          <div style="background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:8px;padding:10px 12px;color:#7c2d12;margin-bottom:14px">
+            No knowledge base yet. The writer needs your career details to work. <b><u>Set it up in Settings → Knowledge Base</u></b>.</div>
+          <div class="lbl">Job description</div>
+          <div class="ta" style="margin:6px 0 12px">Paste the job description here…</div>
+          <div class="lbl">Source URL (optional)</div>
+          <div class="inp" style="margin:6px 0 12px">https://…</div>
+          <div class="row"><label class="muted">☐ Also write a cover letter</label><span class="btn">Generate</span></div>
+        </div>
+      </div>
+      <figcaption>The home screen on first run, with the "set up your knowledge base" banner.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 4. API KEYS -->
+  <section>
+    <div class="step-h"><div class="num">4</div><h2>Add your API key</h2></div>
+    <p>PatraLekh uses <b>your own</b> AI provider key, so you control cost and privacy. Create a key with one provider, then paste it into <b>Settings → API Keys</b> and click <b>Test</b>.</p>
+    <ul class="clean">
+      <li><b>Anthropic (Claude):</b> <a href="https://console.anthropic.com">console.anthropic.com</a></li>
+      <li><b>Google Gemini:</b> <a href="https://aistudio.google.com/app/apikey">aistudio.google.com</a></li>
+      <li>OpenAI is scaffolded but not yet used for generation.</li>
+    </ul>
+    <figure>
+      <div class="browser">
+        <div class="bbar"><div class="d r"></div><div class="d y"></div><div class="d g"></div><div class="addr">localhost:8080/settings</div></div>
+        <div class="screen">
+          <div class="apphead"><div class="brand" style="font-size:16px">Settings</div></div>
+          <div class="tabs"><span>Models</span><span class="on">API Keys</span><span>Knowledge Base</span><span>Rules</span><span>System</span></div>
+          <div class="muted" style="margin-bottom:10px">Keys are stored locally on this computer (never uploaded) and used for every generation.</div>
+          <div class="ui-card">
+            <div class="row"><div><span class="lbl">Anthropic</span> <span class="faintc">console.anthropic.com</span></div>
+              <div><span class="ok">● Set</span> <span class="faintc">sk-a…ABCD</span></div></div>
+            <div class="row" style="margin-top:8px"><div class="inp">Enter a new key to replace…</div>
+              <span class="btn ghost sm">Show</span><span class="btn ghost sm">Test</span><span style="color:var(--red);font-size:12px">Remove</span></div>
+            <div class="ok" style="font-size:12px;margin-top:6px">✓ Key works.</div>
+          </div>
+          <div class="ui-card">
+            <div class="row"><div><span class="lbl">Google Gemini</span> <span class="faintc">aistudio.google.com</span></div>
+              <div><span class="faintc">Not set</span></div></div>
+            <div class="row" style="margin-top:8px"><div class="inp">Paste your API key…</div>
+              <span class="btn ghost sm">Show</span><span class="btn ghost sm">Test</span></div>
+          </div>
+          <div class="row" style="justify-content:flex-end;margin-top:6px"><span class="btn">Save keys</span></div>
+        </div>
+      </div>
+      <figcaption>Settings → API Keys. Paste a key, Test it, then Save. A green "● Set" badge confirms it.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 5. KNOWLEDGE BASE -->
+  <section>
+    <div class="step-h"><div class="num">5</div><h2>Create your Knowledge Base</h2></div>
+    <p>The knowledge base is a single Markdown file describing your career — it is the <b>only</b> source PatraLekh uses about you, so it never invents facts. You create it once, in two clicks:</p>
+    <ul class="clean">
+      <li>Open <b>Settings → Knowledge Base</b> and click <b>Copy generation prompt</b>.</li>
+      <li>Paste that prompt into <b>Claude</b> or <b>ChatGPT</b>, and attach your existing resumes, LinkedIn export, and any career documents.</li>
+      <li>It returns a <code>KNOWLEDGE_BASE.md</code>. Save it, then <b>Upload</b> it here.</li>
+    </ul>
+    <div class="note">You only do this once. To update it later (new job, new achievements), regenerate or edit the file and re-upload. Use <b>Download current</b> to grab the existing one for editing.</div>
+    <figure>
+      <div class="browser">
+        <div class="bbar"><div class="d r"></div><div class="d y"></div><div class="d g"></div><div class="addr">localhost:8080/settings</div></div>
+        <div class="screen">
+          <div class="tabs"><span>Models</span><span>API Keys</span><span class="on">Knowledge Base</span><span>Rules</span><span>System</span></div>
+          <div class="lbl" style="margin-bottom:6px">Current knowledge base</div>
+          <div class="ui-card"><span class="warnc">● None loaded</span> <span class="faintc">— generate and upload one below to start.</span></div>
+          <div class="lbl">1 · Generate it (one-time)</div>
+          <div class="muted" style="margin:4px 0 8px">Copy this prompt, paste it into Claude or ChatGPT with your resumes and documents.</div>
+          <div class="row" style="justify-content:flex-start;gap:8px"><span class="btn ghost sm">Copy generation prompt</span><span class="navlink">Show prompt</span></div>
+          <div class="lbl" style="margin-top:14px">2 · Upload it</div>
+          <div class="row" style="justify-content:flex-start;gap:8px;margin-top:6px"><span class="btn ghost sm">Choose File</span><span class="faintc">KNOWLEDGE_BASE.md</span><span class="btn sm">Upload</span></div>
+          <div class="ok" style="font-size:12px;margin-top:8px">✓ Saved. It will be used on your next resume.</div>
+        </div>
+      </div>
+      <figcaption>Settings → Knowledge Base: copy the prompt, generate the file with an AI, then upload it.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 6. SYSTEM (Pandoc + output) -->
+  <section>
+    <div class="step-h"><div class="num">6</div><h2>Enable Word output (Pandoc) &amp; pick a folder</h2></div>
+    <p>In <b>Settings → System</b>, click <b>Download &amp; install</b> next to Pandoc to enable <code>.docx</code> files (no admin rights needed). Markdown is always produced even without it. Set the <b>Output folder</b> where generated resumes are saved.</p>
+    <figure>
+      <div class="browser">
+        <div class="bbar"><div class="d r"></div><div class="d y"></div><div class="d g"></div><div class="addr">localhost:8080/settings</div></div>
+        <div class="screen">
+          <div class="tabs"><span>Models</span><span>API Keys</span><span>Knowledge Base</span><span>Rules</span><span class="on">System</span></div>
+          <div class="lbl">Pandoc</div>
+          <div class="muted" style="margin:3px 0 8px">Required to generate .docx files. Installed privately for this app — no admin rights or Homebrew needed.</div>
+          <div class="ui-card row"><div><span class="ok">✓ Installed</span> 3.10 <span class="faintc">· managed</span></div><span class="btn sm">Reinstall</span></div>
+          <div class="lbl" style="margin-top:14px">Output folder</div>
+          <div class="row" style="margin-top:6px;gap:8px"><div class="inp">~/Documents/Resumes</div><span class="btn sm">Save</span></div>
+          <div class="lbl" style="margin-top:16px">About</div>
+          <div class="muted">PatraLekh v0.1.0</div>
+        </div>
+      </div>
+      <figcaption>Settings → System: install Pandoc with one click, choose your output folder, see the app version.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 7. SETTINGS overview -->
+  <section>
+    <div class="step-h"><div class="num">7</div><h2>The rest of Settings</h2></div>
+    <p>Two more tabs round out Settings:</p>
+    <ul class="clean">
+      <li><b>Models</b> — choose which AI model runs each stage of the pipeline (JD Analyzer, Planner, Metrics, Writer, Evaluator). Pick a <b>Quick profile</b> (Fast / Balanced / Quality) or set each stage by hand. A live <b>estimated cost per resume</b> updates as you choose.</li>
+      <li><b>Rules</b> — free-form personal rules applied to every resume, one per line (e.g. "always include my portfolio link", "skip my 2-month role at X"). These are enforced by the writer and double-checked by the evaluator.</li>
+    </ul>
+    <figure>
+      <div class="browser">
+        <div class="bbar"><div class="d r"></div><div class="d y"></div><div class="d g"></div><div class="addr">localhost:8080/settings</div></div>
+        <div class="screen">
+          <div class="tabs"><span class="on">Models</span><span>API Keys</span><span>Knowledge Base</span><span>Rules</span><span>System</span></div>
+          <div class="lbl" style="margin-bottom:6px">Quick profile</div>
+          <div class="row" style="justify-content:flex-start;gap:6px;flex-wrap:wrap">
+            <span class="btn ghost sm">Anthropic Fast</span><span class="btn ghost sm">Anthropic Balanced</span><span class="btn ghost sm">Anthropic Quality</span></div>
+          <div class="lbl" style="margin-top:14px">Per-stage model</div>
+          <div class="ui-card" style="padding:8px 12px">
+            <div class="row" style="margin:4px 0"><span>JD Analyzer</span><span class="inp" style="flex:none;width:200px">anthropic:claude-haiku-4-5 ▾</span></div>
+            <div class="row" style="margin:4px 0"><span>Writer</span><span class="inp" style="flex:none;width:200px">anthropic:claude-sonnet-4-6 ▾</span></div>
+            <div class="row" style="margin:4px 0"><span>Evaluator</span><span class="inp" style="flex:none;width:200px">anthropic:claude-sonnet-4-6 ▾</span></div>
+          </div>
+          <div class="row"><span class="muted">Estimated cost per resume: <b>$0.315</b></span><span class="btn">Save</span></div>
+        </div>
+      </div>
+      <figcaption>Settings → Models: per-stage model choice with a live cost estimate.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 8. TELEMETRY -->
+  <section>
+    <div class="step-h"><div class="num">8</div><h2>Telemetry — track usage &amp; cost</h2></div>
+    <p>The <b>Telemetry</b> page (top-right link) shows what you have spent over the last 90 days: totals, cost broken down by stage and by model, and a table of recent runs with tokens and timing. Everything is computed locally from your run history.</p>
+    <figure>
+      <div class="browser">
+        <div class="bbar"><div class="d r"></div><div class="d y"></div><div class="d g"></div><div class="addr">localhost:8080/telemetry</div></div>
+        <div class="screen">
+          <div class="apphead"><div class="brand" style="font-size:16px">Telemetry</div></div>
+          <div class="grid4">
+            <div class="stat"><div class="k">Total resumes</div><div class="v">12</div></div>
+            <div class="stat"><div class="k">Avg cost / resume</div><div class="v">$0.31</div></div>
+            <div class="stat"><div class="k">Avg tokens / resume</div><div class="v">38k</div></div>
+            <div class="stat"><div class="k">Avg total time</div><div class="v">41s</div></div>
+          </div>
+          <div class="lbl" style="margin:14px 0 0">Cost by stage</div>
+          <table class="mini"><tr><th>Stage</th><th class="r">Avg in</th><th class="r">Avg out</th><th class="r">Avg cost</th></tr>
+            <tr><td>Writer</td><td class="r">9,200</td><td class="r">2,400</td><td class="r">$0.13</td></tr>
+            <tr><td>Evaluator</td><td class="r">9,000</td><td class="r">1,000</td><td class="r">$0.08</td></tr>
+            <tr><td>Planner</td><td class="r">8,900</td><td class="r">1,200</td><td class="r">$0.04</td></tr></table>
+          <div class="lbl" style="margin:14px 0 0">Recent runs (newest first)</div>
+          <table class="mini"><tr><th>Date</th><th>Company</th><th>Title</th><th class="r">Tokens</th><th class="r">Cost</th></tr>
+            <tr><td>2026-06-26</td><td>Stripe</td><td>Sr Product Manager</td><td class="r">39k</td><td class="r">$0.32</td></tr>
+            <tr><td>2026-06-25</td><td>Acme</td><td>Staff Engineer</td><td class="r">37k</td><td class="r">$0.29</td></tr></table>
+        </div>
+      </div>
+      <figcaption>The Telemetry page: totals, cost by stage and model, and recent runs — all computed locally.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 9. GENERATE -->
+  <section>
+    <div class="step-h"><div class="num">9</div><h2>Generate a resume</h2></div>
+    <p>Back on the home page, paste a job description, optionally tick <b>Also write a cover letter</b>, and click <b>Generate</b>. Watch the stages run, review and edit the draft in the editor, then <b>Finalize</b> to write the files to your output folder.</p>
+    <p class="muted">Each finalized file is named, for example, <code>PATRALEKH_Your-Name_Stripe-Senior-PM_2026-06-26_Resume.docx</code> — branded, dated, and tied to the job.</p>
+    <div class="note">Tip: use <b>New Resume</b> (top right) to clear everything and start fresh for a different job. Your job description and progress are remembered if you navigate to Settings and back.</div>
+  </section>
+
+  <div class="foot">
+    PatraLekh runs entirely on your computer and uses your own AI provider key. You are responsible for your own provider costs.<br>
+    Download &amp; updates: <a href="https://github.com/patralekhthf/patralekh/releases/latest">github.com/patralekhthf/patralekh</a>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.os button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.os button').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.ospane').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    document.getElementById('os-'+b.dataset.os).classList.add('on');
+  }));
+</script>
+</body>
+</html>
