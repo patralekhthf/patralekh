@@ -12,6 +12,7 @@
     --amber-bg:#fffbeb; --amber-line:#fcd34d; --red:#dc2626;
   }
   *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
        color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
   a{color:var(--blue)}
@@ -22,7 +23,20 @@
   header.hero .tag{color:#cbd5e1;font-size:17px;margin-top:10px}
   header.hero .mean{color:#94a3b8;font-size:13px;margin-top:14px}
   .cta{display:inline-block;margin-top:22px;background:var(--blue);color:#fff;text-decoration:none;
-       padding:11px 22px;border-radius:8px;font-weight:600;font-size:15px}
+       padding:11px 22px;border-radius:8px;font-weight:600;font-size:15px;border:none;cursor:pointer;font-family:inherit}
+  .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .cta.ghost{background:transparent;border:1px solid #475569;color:#e2e8f0}
+  /* Auto-play tour control bar */
+  #tourbar{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(150%);
+    background:#0f172a;color:#fff;border-radius:999px;padding:9px 10px 9px 18px;display:flex;align-items:center;gap:12px;
+    box-shadow:0 10px 30px rgba(2,6,23,.35);transition:transform .35s ease;z-index:50;font-size:14px}
+  #tourbar.show{transform:translateX(-50%) translateY(0)}
+  #tourbar .tlabel{min-width:150px}
+  #tourbar .tprog{color:#94a3b8;font-size:12px}
+  #tourbar button{background:#1e293b;color:#fff;border:none;border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:14px}
+  #tourbar button.stop{background:transparent;color:#94a3b8;width:auto;padding:0 8px}
+  .tour-active{outline:3px solid var(--blue);outline-offset:4px;border-radius:6px;transition:outline-color .3s}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
   /* Section */
   section{margin-top:46px}
   .step-h{display:flex;align-items:center;gap:12px;margin-bottom:14px}
@@ -90,7 +104,11 @@
   <h1>PatraLekh</h1>
   <div class="tag">Tailor your resume to any job — on your own machine.</div>
   <div class="mean">पत्रलेख · "letter-writer" — runs locally, uses your own AI key, your data never leaves your computer.</div>
-  <a class="cta" href="https://github.com/patralekhthf/patralekh/releases/latest">Download the latest version →</a>
+  <div class="cta-row">
+    <button id="playTour" class="cta" type="button">▶ &nbsp;Watch the tour</button>
+    <a class="cta ghost" href="https://github.com/patralekhthf/patralekh/releases/latest">Download ↓</a>
+  </div>
+  <div class="mean" style="margin-top:12px">New to this? Press <b>Watch the tour</b> and just follow along — no technical knowledge needed.</div>
 </header>
 
 <div class="wrap">
@@ -340,13 +358,78 @@
   </div>
 </div>
 
+<!-- Auto-play tour control bar -->
+<div id="tourbar">
+  <span class="tlabel">Tour</span>
+  <span class="tprog"></span>
+  <button id="tPause" title="Pause / resume">❚❚</button>
+  <button id="tStop" class="stop" title="Stop">✕ Stop</button>
+</div>
+
 <script>
+  // OS tabs (Install section)
   document.querySelectorAll('.os button').forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll('.os button').forEach(x=>x.classList.remove('on'));
     document.querySelectorAll('.ospane').forEach(x=>x.classList.remove('on'));
     b.classList.add('on');
     document.getElementById('os-'+b.dataset.os).classList.add('on');
   }));
+
+  // ── Auto-play "watch the tour" — scrolls through the guide like a video ──
+  const stops = [document.querySelector('header.hero'), ...document.querySelectorAll('section')];
+  const labels = ['Welcome','1 · Download','2 · Install & open','3 · First run','4 · Add your API key',
+    '5 · Knowledge Base','6 · Pandoc & output','7 · Settings','8 · Telemetry','9 · Generate'];
+  const DWELL = 5200;      // ms each screen stays on view
+  const bar = document.getElementById('tourbar');
+  const lbl = bar.querySelector('.tlabel');
+  const prog = bar.querySelector('.tprog');
+  const pauseBtn = document.getElementById('tPause');
+  let idx = 0, timer = null, paused = false, active = false;
+
+  function clearHighlight(){
+    document.querySelectorAll('.tour-active').forEach(s=>s.classList.remove('tour-active'));
+  }
+  function highlight(i){
+    clearHighlight();
+    const fig = stops[i].querySelector('figure, .browser');
+    (fig || stops[i]).classList.add('tour-active');
+  }
+  function render(){ lbl.textContent = labels[idx] || 'Tour'; prog.textContent = (idx+1)+' / '+stops.length; }
+  function go(i){
+    idx = i;
+    stops[idx].scrollIntoView({behavior:'smooth', block: idx===0?'start':'center'});
+    highlight(idx); render();
+  }
+  function schedule(){
+    clearTimeout(timer);
+    timer = setTimeout(()=>{
+      if(idx >= stops.length-1){ stopTour(); return; }
+      go(idx+1); schedule();
+    }, DWELL);
+  }
+  function startTour(){
+    active = true; paused = false; idx = 0;
+    bar.classList.add('show'); pauseBtn.textContent = '❚❚';
+    go(0); schedule();
+  }
+  function stopTour(){
+    active = false; clearTimeout(timer);
+    bar.classList.remove('show');
+    clearHighlight();
+  }
+  function togglePause(){
+    if(!active) return;
+    paused = !paused;
+    if(paused){ clearTimeout(timer); pauseBtn.textContent = '▶'; }
+    else { pauseBtn.textContent = '❚❚'; schedule(); }
+  }
+
+  document.getElementById('playTour').addEventListener('click', startTour);
+  pauseBtn.addEventListener('click', togglePause);
+  document.getElementById('tStop').addEventListener('click', stopTour);
+  // If the viewer takes over (scrolls/keys), pause so we don't fight them.
+  ['wheel','touchmove','keydown'].forEach(ev =>
+    window.addEventListener(ev, ()=>{ if(active && !paused) togglePause(); }, {passive:true}));
 </script>
 </body>
 </html>
