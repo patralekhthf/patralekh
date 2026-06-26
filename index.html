@@ -31,8 +31,10 @@
     background:#0f172a;color:#fff;border-radius:999px;padding:9px 10px 9px 18px;display:flex;align-items:center;gap:12px;
     box-shadow:0 10px 30px rgba(2,6,23,.35);transition:transform .35s ease;z-index:50;font-size:14px}
   #tourbar.show{transform:translateX(-50%) translateY(0)}
-  #tourbar .tlabel{min-width:150px}
-  #tourbar .tprog{color:#94a3b8;font-size:12px}
+  #tourbar .tlabel{min-width:128px}
+  #tourbar .ttrack{width:84px;height:6px;background:#334155;border-radius:999px;overflow:hidden;flex:none}
+  #tourbar .tfill{display:block;height:100%;width:0;background:var(--blue);border-radius:999px}
+  #tourbar .tprog{color:#94a3b8;font-size:12px;min-width:42px;text-align:right}
   #tourbar button{background:#1e293b;color:#fff;border:none;border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:14px}
   #tourbar button.stop{background:transparent;color:#94a3b8;width:auto;padding:0 8px}
   .tour-active{outline:3px solid var(--blue);outline-offset:4px;border-radius:6px;transition:outline-color .3s}
@@ -361,6 +363,7 @@
 <!-- Auto-play tour control bar -->
 <div id="tourbar">
   <span class="tlabel">Tour</span>
+  <span class="ttrack" title="Next screen coming up"><span class="tfill"></span></span>
   <span class="tprog"></span>
   <button id="tPause" title="Pause / resume">❚❚</button>
   <button id="tStop" class="stop" title="Stop">✕ Stop</button>
@@ -383,8 +386,9 @@
   const bar = document.getElementById('tourbar');
   const lbl = bar.querySelector('.tlabel');
   const prog = bar.querySelector('.tprog');
+  const fill = bar.querySelector('.tfill');
   const pauseBtn = document.getElementById('tPause');
-  let idx = 0, timer = null, paused = false, active = false;
+  let idx = 0, active = false, paused = false, stepStart = 0, pausedElapsed = 0, rafId = null;
 
   function clearHighlight(){
     document.querySelectorAll('.tour-active').forEach(s=>s.classList.remove('tour-active'));
@@ -395,33 +399,50 @@
     (fig || stops[i]).classList.add('tour-active');
   }
   function render(){ lbl.textContent = labels[idx] || 'Tour'; prog.textContent = (idx+1)+' / '+stops.length; }
+
+  // One clock drives both the countdown bar and the advance, so they stay in sync.
+  function frame(now){
+    if(!active || paused) return;
+    const f = Math.min((now - stepStart) / DWELL, 1);
+    fill.style.width = (f*100)+'%';
+    if(f >= 1){
+      if(idx >= stops.length-1){ stopTour(); return; }
+      go(idx+1);
+      return;
+    }
+    rafId = requestAnimationFrame(frame);
+  }
   function go(i){
     idx = i;
     stops[idx].scrollIntoView({behavior:'smooth', block: idx===0?'start':'center'});
     highlight(idx); render();
-  }
-  function schedule(){
-    clearTimeout(timer);
-    timer = setTimeout(()=>{
-      if(idx >= stops.length-1){ stopTour(); return; }
-      go(idx+1); schedule();
-    }, DWELL);
+    fill.style.width = '0%';
+    stepStart = performance.now();
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(frame);
   }
   function startTour(){
     active = true; paused = false; idx = 0;
     bar.classList.add('show'); pauseBtn.textContent = '❚❚';
-    go(0); schedule();
+    go(0);
   }
   function stopTour(){
-    active = false; clearTimeout(timer);
-    bar.classList.remove('show');
-    clearHighlight();
+    active = false; cancelAnimationFrame(rafId);
+    bar.classList.remove('show'); clearHighlight();
+    fill.style.width = '0%';
   }
   function togglePause(){
     if(!active) return;
     paused = !paused;
-    if(paused){ clearTimeout(timer); pauseBtn.textContent = '▶'; }
-    else { pauseBtn.textContent = '❚❚'; schedule(); }
+    if(paused){
+      cancelAnimationFrame(rafId);
+      pausedElapsed = performance.now() - stepStart;   // freeze the bar where it is
+      pauseBtn.textContent = '▶';
+    } else {
+      stepStart = performance.now() - pausedElapsed;     // resume from where it froze
+      pauseBtn.textContent = '❚❚';
+      rafId = requestAnimationFrame(frame);
+    }
   }
 
   document.getElementById('playTour').addEventListener('click', startTour);
