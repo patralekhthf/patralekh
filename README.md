@@ -10,7 +10,7 @@ directly to the AI provider you choose with **your own API key** — your resume
 your documents, and your job descriptions never pass through anyone else's
 servers.
 
-> The name *PatraLekh* (पत्रलेख) means "letter-writer" — *patra* (letter/document)
+> **PatraLekh** (पत्रलेख) joins two words: पत्र *(patra)* — "letter" or "document" — and लेख *(lekh)* — "writing". Together they mean *"letter-writer"*.
 > + *lekh* (writing).
 
 📖 **New here? Read the [illustrated Getting Started guide](https://patralekhthf.github.io/patralekh/)** — download, install, set up your API key and knowledge base, and your first run, with pictures of every screen. (Also attached to each release as `PatraLekh-Guide.html`.)
