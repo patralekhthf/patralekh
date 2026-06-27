@@ -157,11 +157,30 @@
       <button data-os="lin">Linux</button>
     </div>
     <div class="ospane on" id="os-mac">
-      <ul class="clean">
-        <li>Unzip and double-click <b>PatraLekh</b>.</li>
-        <li>First time only: macOS may say the developer "cannot be verified." <b>Right-click the app → Open → Open.</b></li>
-        <li>Alternatively in Terminal: <code>xattr -d com.apple.quarantine ./PatraLekh</code></li>
-      </ul>
+      <p style="margin-top:0">macOS blocks free, unsigned apps the first time. Allow PatraLekh <b>once</b> — about 20 seconds:</p>
+      <ol class="clean">
+        <li>Double-click <b>PatraLekh</b>. A message says <i>"Apple could not verify…"</i> — click <b>Done</b>.</li>
+        <li>Open <b>System Settings → Privacy &amp; Security</b>.</li>
+        <li>Scroll down to <b>Security</b>. Next to <i>"PatraLekh was blocked"</i>, click <b>Open Anyway</b>.</li>
+        <li>Confirm with Touch ID or your password, then click <b>Open</b>.</li>
+      </ol>
+      <p class="muted">After this one time, just double-click <b>PatraLekh</b> normally — no more warnings. (On macOS 14 or earlier you can instead right-click PatraLekh → Open → Open.)</p>
+      <figure>
+        <div class="browser">
+          <div class="bbar"><div class="d r"></div><div class="d y"></div><div class="d g"></div><div class="addr">System Settings — Privacy &amp; Security</div></div>
+          <div class="screen">
+            <div class="lbl" style="margin-bottom:8px">Security</div>
+            <div class="ui-card row">
+              <div>
+                <span class="lbl">"PatraLekh" was blocked to protect your Mac.</span>
+                <div class="faintc" style="font-size:12px;margin-top:2px">It is from a developer that cannot be verified.</div>
+              </div>
+              <span class="btn">Open Anyway</span>
+            </div>
+          </div>
+        </div>
+        <figcaption>Step 3: in System Settings → Privacy &amp; Security, click "Open Anyway" (one time only).</figcaption>
+      </figure>
     </div>
     <div class="ospane" id="os-win">
       <ul class="clean">
@@ -174,7 +193,7 @@
         <li>In a terminal: <code>chmod +x PatraLekh &amp;&amp; ./PatraLekh</code></li>
       </ul>
     </div>
-    <div class="warn">A small terminal/console window stays open while PatraLekh runs — that is the app itself. Closing it quits PatraLekh.</div>
+    <div class="warn">On Windows and Linux a small console window stays open while PatraLekh runs — that's the app itself; closing it quits PatraLekh. On macOS it runs as a normal app (no window).</div>
   </section>
 
   <!-- 3. FIRST RUN -->
