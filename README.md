@@ -1,3 +1,5 @@
+<p align="center"><img src="logo.png" width="340" alt="PatraLekh"></p>
+
 # PatraLekh
 
 **Tailor your resume to any job, on your own machine.**
